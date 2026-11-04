@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>COSMETIC KORE - Hana Beauty Advisor</title>
+    <!-- Google Fonts: Inter & Noto Sans Arabic for Kurdish Sorani and Iraqi Arabic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #ff6b8b;
+            --secondary-pink: #ff8fab;
+            --light-pink: #fff0f3;
+            --soft-blush: #ffe5ec;
+            --bubble-user: linear-gradient(135deg, #ff6b8b, #ff85a1);
+            --bubble-bot: #ffffff;
+            --text-dark: #2d2327;
+            --text-muted: #8a7a82;
+            --white: #ffffff;
+            --shadow-subtle: 0 10px 25px -5px rgba(255, 107, 139, 0.12);
+            --shadow-elevated: 0 15px 35px -5px rgba(255, 107, 139, 0.2);
+            --radius-bubble: 20px;
+            --app-max-width: 460px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(180deg, #ffeef2 0%, #fff6f8 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-dark);
+        }
+
+        /* RTL typography overrides */
+        body[dir="rtl"] {
+            font-family: 'Noto Sans Arabic', sans-serif;
+        }
+
+        .chat-app-wrapper {
+            width: 100%;
+            max-width: var(--app-max-width);
+            height: 100vh;
+            background-color: var(--light-pink);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: var(--shadow-elevated);
+            overflow: hidden;
+        }
+
+        @media (min-width: 480px) {
+            .chat-app-wrapper {
+                height: 92vh;
+                border-radius: 36px;
+                border: 8px solid rgba(255, 255, 255, 0.8);
+            }
+        }
+
+        /* Header Styling */
+        .chat-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255, 182, 193, 0.35);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand-logo {
+            font-size: 13px;
+            letter-spacing: 2px;
+            font-weight: 700;
+            color: var(--primary-pink);
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .lang-selector {
+            display: flex;
+            background: var(--soft-blush);
+            border-radius: 20px;
+            padding: 3px;
+            gap: 2px;
+        }
+
+        .lang-btn {
+            border: none;
+            background: transparent;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 5px 9px;
+            border-radius: 14px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn.active {
+            background: var(--white);
+            color: var(--primary-pink);
+            box-shadow: 0 2px 6px rgba(255, 107, 139, 0.2);
+        }
+
+        .assistant-profile {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 52px;
+            height: 52px;
+            flex-shrink: 0;
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--primary-pink);
+            padding: 2px;
+            background: #fff;
+            object-fit: cover;
+        }
+
+        .status-dot {
+            width: 13px;
+            height: 13px;
+            background: #10b981;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0px;
+            right: 0px;
+            border: 2px solid #ffffff;
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .assistant-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .assistant-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-korean {
+            font-size: 10px;
+            background: #ffe3ec;
+            color: var(--primary-pink);
+            padding: 2px 7px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .assistant-status {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Chat Body */
+        .chat-body {
+            flex: 1;
+            padding: 20px 16px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chat-body::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .chat-body::-webkit-scrollbar-thumb {
+            background: #ffd3de;
+            border-radius: 10px;
+        }
+
+        .message-row {
+            display: flex;
+            gap: 10px;
+            max-width: 82%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-row.bot {
+            align-self: flex-start;
+        }
+
+        .message-row.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .mini-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 1.5px solid var(--secondary-pink);
+            background: #fff;
+        }
+
+        .message-content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .bubble {
+            padding: 13px 16px;
+            font-size: 14.5px;
+            line-height: 1.5;
+            position: relative;
+            word-break: break-word;
+        }
+
+        .bot .bubble {
+            background: var(--bubble-bot);
+            color: var(--text-dark);
+            border-radius: var(--radius-bubble) var(--radius-bubble) var(--radius-bubble) 4px;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+            border: 1px solid rgba(255, 182, 193, 0.25);
+        }
+
+        [dir="rtl"] .bot .bubble {
+            border-radius: var(--radius-bubble) var(--radius-bubble) 4px var(--radius-bubble);
+        }
+
+        .user .bubble {
+            background: var(--bubble-user);
+            color: #ffffff;
+            border-radius: var(--radius-bubble) var(--radius-bubble) 4px var(--radius-bubble);
+            box-shadow: 0 6px 16px rgba(255, 107, 139, 0.28);
+        }
+
+        [dir="rtl"] .user .bubble {
+            border-radius: var(--radius-bubble) var(--radius-bubble) var(--radius-bubble) 4px;
+        }
+
+        .timestamp {
+            font-size: 10.5px;
+            color: #a4949b;
+            padding: 0 4px;
+        }
+
+        .user .timestamp {
+            text-align: right;
+        }
+
+        [dir="rtl"] .user .timestamp {
+            text-align: left;
+        }
+
+        /* Typing Dots */
+        .typing-bubble {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 12px 18px;
+            width: fit-content;
+        }
+
+        .typing-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--primary-pink);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: bounce 1.3s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-6px); opacity: 1; }
+        }
+
+        /* Quick Replies Horizontal Scroller */
+        .quick-replies-container {
+            padding: 6px 14px 10px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .quick-replies-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .quick-reply-pill {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--primary-pink);
+            border: 1.5px solid #ffc2d1;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12.5px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(255, 182, 193, 0.18);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .quick-reply-pill:active, .quick-reply-pill:hover {
+            background: var(--primary-pink);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        /* Input Controls */
+        .chat-input-area {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            padding: 12px 16px 18px;
+            border-top: 1px solid rgba(255, 182, 193, 0.35);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            background: #fff5f8;
+            border: 1.5px solid #ffd0dc;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            padding: 4px 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: var(--primary-pink);
+            box-shadow: 0 0 0 3px rgba(255, 107, 139, 0.15);
+        }
+
+        .text-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 8px 0;
+            font-size: 14.5px;
+            outline: none;
+            color: var(--text-dark);
+            font-family: inherit;
+        }
+
+        .send-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bubble-user);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 107, 139, 0.35);
+            transition: transform 0.2s, background 0.2s;
+            flex-shrink: 0;
+        }
+
+        .send-btn:active {
+            transform: scale(0.92);
+        }
+
+        .send-icon {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        [dir="rtl"] .send-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+
+    <main class="chat-app-wrapper">
+        <!-- Header -->
+        <header class="chat-header">
+            <div class="header-top">
+                <div class="brand-logo">
+                    <span>🌸</span>
+                    <span>COSMETIC KORE</span>
+                </div>
+                <!-- Language Selector -->
+                <div class="lang-selector" role="group" aria-label="Language selection">
+                    <button class="lang-btn" onclick="setLanguage('ckb')">کوردی</button>
+                    <button class="lang-btn" onclick="setLanguage('ar')">عراقي</button>
+                    <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+                </div>
+            </div>
+
+            <div class="assistant-profile">
+                <div class="avatar-container">
+                    <!-- High Quality Hana Stylized Avatar SVG -->
+                    <svg class="avatar-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="skin" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#fff0ea"/>
+                                <stop offset="100%" stop-color="#fed7cb"/>
+                            </linearGradient>
+                            <linearGradient id="hair" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#3d2c29"/>
+                                <stop offset="100%" stop-color="#1f1412"/>
+                            </linearGradient>
+                            <linearGradient id="blush" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#ff758f"/>
+                                <stop offset="100%" stop-color="#ffb3c1"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Hair back -->
+                        <path d="M25,50 Q16,80 20,95 Q50,100 80,95 Q84,80 75,50 Z" fill="url(#hair)"/>
+                        <!-- Head & Neck -->
+                        <path d="M43,65 L43,80 L57,80 L57,65 Z" fill="url(#skin)"/>
+                        <ellipse cx="50" cy="50" rx="23" ry="26" fill="url(#skin)"/>
+                        <!-- Hair front & bangs -->
+                        <path d="M26,45 C24,24 40,16 50,16 C60,16 76,24 74,45 C70,30 63,26 50,26 C37,26 30,30 26,45 Z" fill="url(#hair)"/>
+                        <path d="M26,45 Q23,68 28,78 Q33,65 31,45 Z" fill="url(#hair)"/>
+                        <path d="M74,45 Q77,68 72,78 Q67,65 69,45 Z" fill="url(#hair)"/>
+                        <!-- Eyes & Brows -->
+                        <path d="M38,44 Q42,42 45,44" stroke="#2b1810" stroke-width="2" fill="none" stroke-linecap="round"/>
+                        <path d="M55,44 Q58,42 62,44" stroke="#2b1810" stroke-width="2" fill="none" stroke-linecap="round"/>
+                        <circle cx="41.5" cy="48" r="2.8" fill="#2b1810"/>
+                        <circle cx="42.5" cy="47" r="0.9" fill="#fff"/>
+                        <circle cx="58.5" cy="48" r="2.8" fill="#2b1810"/>
+                        <circle cx="59.5" cy="47" r="0.9" fill="#fff"/>
+                        <!-- Cheeks Blush -->
+                        <circle cx="36" cy="54" r="4.5" fill="url(#blush)" opacity="0.6"/>
+                        <circle cx="64" cy="54" r="4.5" fill="url(#blush)" opacity="0.6"/>
+                        <!-- Smile -->
+                        <path d="M47,56 Q50,60 53,56" stroke="#e05769" stroke-width="2" fill="none" stroke-linecap="round"/>
+                        <!-- Korean Hair Flower Pin -->
+                        <circle cx="70" cy="30" r="4" fill="#ff8fab"/>
+                        <circle cx="70" cy="30" r="1.5" fill="#fff"/>
+                    </svg>
+                    <span class="status-dot"></span>
+                </div>
+                <div class="assistant-info">
+                    <div class="assistant-name">
+                        <span id="hana-name">Hana • هناء</span>
+                        <span class="badge-korean">K-Beauty</span>
+                    </div>
+                    <span class="assistant-status" id="hana-title">Korean Skincare Specialist • Online</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Chat Log -->
+        <section class="chat-body" id="chatBody" aria-live="polite">
+            <!-- Messages will be rendered here dynamically -->
+        </section>
+
+        <!-- Quick Replies Bar -->
+        <nav class="quick-replies-container" id="quickReplies" aria-label="Suggested questions">
+            <!-- Dynamic Buttons rendered based on language -->
+        </nav>
+
+        <!-- Message Input -->
+        <footer class="chat-input-area">
+            <div class="input-wrapper">
+                <input 
+                    type="text" 
+                    id="messageInput" 
+                    class="text-input" 
+                    placeholder="Ask Hana about Korean skincare..." 
+                    autocomplete="off"
+                    onkeydown="handleKeyPress(event)"
+                >
+            </div>
+            <button class="send-btn" id="sendBtn" onclick="handleSendMessage()" aria-label="Send message">
+                <svg class="send-icon" viewBox="0 0 24 24">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
+        </footer>
+    </main>
+
+    <script>
+        // Language Database
+        const i18n = {
+            en: {
+                dir: 'ltr',
+                name: 'Hana',
+                title: 'Korean Skincare Specialist • Online',
+                placeholder: 'Ask Hana about skincare, acne, glow...',
+                welcome: "Hello lovely! 🌸 I'm Hana from COSMETIC KORE. I focus only on skincare routines. Tell me your skin type or concern, or write a product name and I'll discuss it with you. 💗",
+                quickReplies: [
+                    { label: "✨ Glass Skin Routine", query: "glass skin" },
+                    { label: "🌿 Acne & Blemishes", query: "acne" },
+                    { label: "💧 Best Moisturizer", query: "moisturizer" },
+                    { label: "☀️ Sunscreen Pick", query: "sunscreen" }
+                ],
+                responses: {
+                    default: "I recommend double-cleansing followed by a soothing Centella Asiatica toner and ceramide moisturizer. What is your skin type (Oily, Dry, or Combo)?",
+                    "glass skin": "To get that Korean 'Glass Skin' glow ✨:\n1. COSRX Low pH Cleanser\n2. Anua Heartleaf 77% Soothing Toner\n3. Beauty of Joseon Glow Serum (Propolis + Niacinamide)\n4. Light Ceramide Cream. Never skip sunscreen!",
+                    "acne": "For breakouts & acne scars 🌿:\nUse the Some By Mi AHA BHA PHA 30-Day Miracle line or COSRX BHA Blackhead Power Liquid. They soothe inflammation without stripping your barrier!",
+                    "moisturizer": "For dry/normal skin: SoonJung 2x Barrier Cream 💧.\nFor oily/combination: Torriden DIVE-IN Low Molecular Hyaluronic Acid Soothing Cream!",
+                    "sunscreen": "Our top Korean sunscreens ☀️: Beauty of Joseon Relief Sun: Rice + Probiotics (dewy finish) or Skin1004 Madagascar Centella Water-Fit Sun Serum (very lightweight & zero white-cast)!"
+                }
+            },
+            ckb: {
+                dir: 'rtl',
+                name: 'هانا (Hana)',
+                title: 'پسپۆڕی بەرهەمە کۆرییەکان • ئۆنلاین',
+                placeholder: 'پرسیار لە هانا بکە دەربارەی پێستت...',
+                welcome: "سڵاو ئازیزم! 🌸 من هانام لە COSMETIC KORE. تایبەتمەندم بە ڕۆتینی چاودێری پێست. دەتوانیت جۆری پێستت یان کێشەی پێستت بڵێیت، یان ناوی بەرهەمێک بنووسیت تا قسەی لەسەر بکەین. 💗",
+                quickReplies: [
+                    { label: "✨ ڕۆتینی پێستی شوشەیی", query: "glass skin" },
+                    { label: "🌿 چارەسەری زیپکە", query: "acne" },
+                    { label: "💧 شێدارکەرەوەی گونجاو", query: "moisturizer" },
+                    { label: "☀️ باشترین دژەخۆر", query: "sunscreen" }
+                ],
+                responses: {
+                    default: "گیانم، من هانا تەنها لە ڕۆتینی چاودێری پێست یارمەتیت دەدەم 🌸 جۆری پێستت چییە: وشک، چەور، تێکەڵ یان هەستیار؟ یان ناوی بەرهەمەکەت بنووسە تا قسەی لەسەر بکەین.",
+                    "glass skin": "بۆ بەدەستهێنانی پێستێکی شوشەیی و ڕووناک (Glass Skin) ✨:\n١. غەسولی COSRX Low pH\n٢. تۆنەری بەناوبانگی Anua 77%\n٣. سیرۆمی Beauty of Joseon Glow (پڕۆپۆلیس و نیاسیناماید)\n٤. کرێمی شێدارکەرەوە و هەمیشە دژەخۆر لەبیر مەکە!",
+                    "acne": "بۆ زیپکە و شوێنەواری زیپکە 🌿:\nتۆنەر و سیرۆمی Some By Mi AHA-BHA-PHA یان بەرهەمەکانی سێنتێلای Skin1004 معجیزەن بۆ هێورکردنەوەی پێست و پاککردنەوەی کونیلەکان.",
+                    "moisturizer": "بۆ پێستی وشک: SoonJung 2x Barrier Cream زۆر نایابە 💧.\nبۆ پێستی چەور: Torriden Hyaluronic Soothing Cream کە زۆر سووکە و کونیلە ناگرێت!",
+                    "sunscreen": "باشترین دژەخۆری کۆری ☀️:\nBeauty of Joseon Relief Sun بە برنج و پڕۆبایۆتیک (بۆ پێستی نۆرماڵ و وشک) یاخود Skin1004 Hyalu-Cica (سووکترین فۆرمولا بەبێ شوێنەواری سپی)!"
+                }
+            },
+            ar: {
+                dir: 'rtl',
+                name: 'هناء (Hana)',
+                title: 'خبيرة العناية الكورية • متصل الآن',
+                placeholder: 'سألي هناء عن نوع بشرتج وروتينج...',
+                welcome: "هلا بعيوني! 🌸 أني هناء من COSMETIC KORE. اختصاصي بس بروتين العناية بالبشرة. گوليلي نوع بشرتج أو مشكلتها، أو اكتبي اسم المنتج حتى نحچي عنه. 💗",
+                quickReplies: [
+                    { label: "✨ بشرة زجاجية (Glass Skin)", query: "glass skin" },
+                    { label: "🌿 علاج الحبوب والآثار", query: "acne" },
+                    { label: "💧 مرطب كوري أصلي", query: "moisturizer" },
+                    { label: "☀️ أفضل واقي شمس", query: "sunscreen" }
+                ],
+                responses: {
+                    default: "أنصحج تبدين بالغسول المزدوج بعدها تونر مهدئ من سنتيلا ومرطب يدعم حاجز البشرة. شنو نوع بشرتج (دهنية، جافة، لو مختلطة)؟",
+                    "glass skin": "حتى تحصلين على لمعة البشرة الزجاجية الكورية ✨:\n١. غسول كوزريكس COSRX Low pH\n٢. تونر أنوا Anua Heartleaf 77%\n٣. سيروم بيوتي أوف جوسون (بروبوليس ونياسيناميد)\n٤. مرطب مائي ولا تنسين واقي الشمس يومياً!",
+                    "acne": "لعلاج حب الشباب وآثاره 🌿:\nمجموعة Some By Mi المعجزة (AHA BHA PHA) أو سيروم الحلزون مع النياسيناميد من COSRX يرتب المسام ويصفي الحبوب بسرعة بدون تحسس.",
+                    "moisturizer": "إذا بشرتج جافة: مرطب سون جونغ SoonJung 2x المنقذ 💧.\nإذا بشرتج دهنية أو مختلطة: مرطب توريدن Torriden المائي بحمض الهيالورونيك خفيف ويمتص بثواني!",
+                    "sunscreen": "أفضل واقيات شمس كورية بالعراق ☀️:\nواقي بيوتي أوف جوسون بالرز (ترطيب ونضارة تجنن) أو سكن 1004 سنتيلا المائي (خفيف مثل السيروم وما يترك أي أثر أبيض)!"
+                }
+            }
+        };
+
+        let currentLang = 'ckb';
+        function setLanguage(lang) {
+            currentLang = lang;
+            const data = i18n[lang];
+
+            // Direction and Fonts
+            document.documentElement.setAttribute('lang', lang);
+            document.documentElement.setAttribute('dir', data.dir);
+            document.body.setAttribute('dir', data.dir);
+
+            // Active button state
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                const isSelected = (lang === 'ckb' && btn.innerText.includes('کوردی')) ||
+                                   (lang === 'ar' && btn.innerText.includes('عراقي')) ||
+                                   (lang === 'en' && btn.innerText.trim() === 'EN');
+                btn.classList.toggle('active', isSelected);
+            });
+
+            // Update UI static elements
+            document.getElementById('hana-name').innerText = data.name;
+            document.getElementById('hana-title').innerText = data.title;
+            document.getElementById('messageInput').placeholder = data.placeholder;
+
+            // Render Quick Replies
+            renderQuickReplies();
+
+            // Clear chat and add localized welcome
+            const chatBody = document.getElementById('chatBody');
+            chatBody.innerHTML = '';
+            appendMessage('bot', data.welcome);
+        }
+
+        function renderQuickReplies() {
+            const container = document.getElementById('quickReplies');
+            container.innerHTML = '';
+            i18n[currentLang].quickReplies.forEach(qr => {
+                const btn = document.createElement('button');
+                btn.className = 'quick-reply-pill';
+                btn.innerText = qr.label;
+                btn.onclick = () => {
+                    sendMessage(qr.label, qr.query);
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function getCurrentTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            return `${hours}:${minutes} ${ampm}`;
+        }
+
+        function appendMessage(sender, text) {
+            const chatBody = document.getElementById('chatBody');
+            const row = document.createElement('div');
+            row.className = `message-row ${sender}`;
+
+            const avatarSvg = sender === 'bot' ? `
+                <svg class="mini-avatar" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="48" fill="#ffe5ec"/>
+                    <circle cx="50" cy="45" r="22" fill="#ffd0dc"/>
+                    <circle cx="43" cy="45" r="3" fill="#2d2327"/>
+                    <circle cx="57" cy="45" r="3" fill="#2d2327"/>
+                    <path d="M47,53 Q50,56 53,53" stroke="#e05769" stroke-width="2" fill="none"/>
+                </svg>` : '';
+
+            row.innerHTML = `
+                ${avatarSvg}
+                <div class="message-content">
+                    <div class="bubble"></div>
+                    <span class="timestamp">${getCurrentTime()}</span>
+                </div>
+            `;
+            const bubble = row.querySelector('.bubble');
+            bubble.textContent = text;
+            bubble.style.whiteSpace = 'pre-line';
+
+            chatBody.appendChild(row);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const chatBody = document.getElementById('chatBody');
+            const typingRow = document.createElement('div');
+            typingRow.className = 'message-row bot typing-indicator-row';
+            typingRow.id = 'typingIndicator';
+            typingRow.innerHTML = `
+                <svg class="mini-avatar" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="48" fill="#ffe5ec"/>
+                    <circle cx="50" cy="45" r="22" fill="#ffd0dc"/>
+                </svg>
+                <div class="message-content">
+                    <div class="bubble typing-bubble">
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                    </div>
+                </div>
+            `;
+            chatBody.appendChild(typingRow);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const elem = document.getElementById('typingIndicator');
+            if (elem) elem.remove();
+        }
+
+        let waitingForProductName = false;
+        let waitingForSkinType = false;
+        let pendingTopic = '';
+
+        function generateBotResponse(userInput, predefinedKey = null) {
+            const raw = (userInput || '').trim();
+            const input = raw.toLowerCase();
+            const lang = currentLang;
+            const ckb = lang === 'ckb';
+            const ar = lang === 'ar';
+            const say = (ku, iraqi, en) => ckb ? ku : ar ? iraqi : en;
+
+            const greeting = /^(hi|hello|hey|good morning|good evening|salam|salaam|slaw|سڵاو|سلاو|هلا|هلو|مرحبا|السلام عليكم|صباح الخير|مساء الخير)[!.؟\s]*$/i;
+            if (greeting.test(input)) return say(
+                'سڵاو گیانم! 🌸 بەخێربێیت بۆ COSMETIC KORE. چۆنی؟ چ پرسیارێکت لەسەر چاودێری پێست یان قژ هەیە؟',
+                'هلا بعيوني! 🌸 نورتي COSMETIC KORE. شلونج؟ شنو سؤالج عن العناية بالبشرة أو الشعر؟',
+                'Hello lovely! 🌸 Welcome to COSMETIC KORE. What would you like to know about skin or hair care?');
+            if (/(thank|thanks|سوپاس|ممنون|دەستخۆش|شكرا|تسلمين)/i.test(input)) return say('بەخێربێیت گیانم! 💗 هەر پرسیارێکت هەبوو لێرەم.', 'العفو حبيبتي! 💗 بأي وقت آني هنا.', 'You’re welcome! 💗 I’m here if you need more help.');
+            if (/(bye|goodbye|خواحافیز|خوات لەگەڵ|مع السلامة|باي)/i.test(input)) return say('خواحافیز گیانم! 🌷 بەهیوای ڕۆژێکی جوان.', 'مع السلامة عيوني! 🌷 يومج سعيد.', 'Goodbye lovely! 🌷 Have a beautiful day.');
+
+            // Prices are never guessed or quoted.
+            if (/(price|how much|نرخ|بەها|چەندە|سعر|بكم|الاسعار|قیمت)/i.test(input)) return say(
+                'گیانم، هانا نرخی بەرهەمەکان نازانێت و نرخ هەڵناگرێت 🌸 بۆ زانینی نرخی نوێ، تکایە پەیوەندی بە فرۆشگا بکە لە ڕێگەی واتساپ یان ڤایبەر.',
+                'حبيبتي، هناء ما عدها قائمة أسعار وما تكدر تأكد السعر 🌸 حتى تعرفين السعر الحالي، راسلينا على واتساب أو فايبر.',
+                'I don’t have live price information, so I won’t guess. Please contact the store through WhatsApp or Viber for the current price.');
+
+            const skinTypes = [
+                { re: /(چەور|چرب|دهنية|دهنيه|oily)/i, name: 'oily' },
+                { re: /(وشک|خشک|جافة|جافه|dry)/i, name: 'dry' },
+                { re: /(هەستیار|حساس|sensitive)/i, name: 'sensitive' },
+                { re: /(نۆرماڵ|نورمال|عادية|normal)/i, name: 'normal' },
+                { re: /(تێکەڵ|مختلطة|مختلطه|combination|combo)/i, name: 'combination' }
+            ];
+            const detectedSkin = skinTypes.find(x => x.re.test(input));
+            if (waitingForSkinType && detectedSkin) {
+                waitingForSkinType = false;
+                const topic = pendingTopic || 'routine'; pendingTopic = '';
+                const tips = {
+                    oily: say('پێستی چەور 🌿: غسولی نەرم و بێ توندی، تۆنەری بێ ئەلکۆڵ ئەگەر پێستت پێی ڕێک بوو، سیرۆمی نیاسیناماید، شێدارکەرەوەی سووک و دژەخۆری SPF 30+ بەکاربهێنە. بەرهەمەکان یەک بە یەک زیاد بکە.', 'البشرة الدهنية 🌿: غسول لطيف، تونر بدون كحول إذا يناسبج، سيروم نياسيناميد، مرطب خفيف وواقي شمس SPF 30+.', 'Oily skin: use a gentle cleanser, an alcohol-free toner if tolerated, niacinamide serum, lightweight moisturizer and SPF 30+ sunscreen.'),
+                    dry: say('پێستی وشک 💧: غسولی نەرم و بێ توندی، تۆنەری شێدارکەرەوە، سیرۆمی هایالورۆنیک ئەسید، کرێمی چڕتر بە سیراماید و دژەخۆر بەکاربهێنە. ئاوی زۆر گەرم و سابونە توندەکان بەکارمەهێنە.', 'البشرة الجافة 💧: غسول لطيف، تونر مرطب، سيروم هيالورونيك، كريم غني بالسيراميد وواقي شمس. ابتعدي عن الماي الحار والصابون القاسي.', 'Dry skin: choose a gentle cleanser, hydrating toner, hyaluronic-acid serum, a richer ceramide moisturizer and sunscreen. Avoid hot water and harsh soap.'),
+                    sensitive: say('پێستی هەستیار 🌸: ڕۆتینەکەت سادە بێت؛ غسولی زۆر نەرم، شێدارکەرەوەی بێ بۆن و دژەخۆری گونجاو. تۆنەر و سیرۆمی چالاک بە هێواشی و تەنها دوای تاقیکردنەوەی بچووک زیاد بکە.', 'البشرة الحساسة 🌸: خلي الروتين بسيط؛ غسول لطيف جداً، مرطب بدون عطر وواقي شمس مناسب. دخلي التونر والسيروم بالتدريج وبعد اختبار منطقة صغيرة.', 'Sensitive skin: keep it simple—very gentle cleanser, fragrance-free moisturizer and suitable sunscreen. Introduce toner or active serums slowly after a patch test.'),
+                    normal: say('پێستی نۆرماڵ 🌼: بەیانی غسولی نەرم، شێدارکەرەوە و دژەخۆر؛ شەو غسول، ئەگەر پێویست بوو تۆنەر یان سیرۆمی گونجاو، پاشان شێدارکەرەوە. هەموو بەرهەمێک یەک بە یەک زیاد بکە.', 'البشرة العادية 🌼: الصبح غسول لطيف ومرطب وواقي شمس؛ بالليل غسول، تونر أو سيروم حسب الحاجة، وبعده مرطب.', 'Normal skin: morning—gentle cleanser, moisturizer and sunscreen. Evening—cleanser, optional toner or serum, then moisturizer.'),
+                    combination: say('پێستی تێکەڵ 🌿: بۆ ناوچەی T کە چەورە غسولی نەرم و شێدارکەرەوەی سووک؛ بۆ ناوچە وشکەکان شێدارکەرەوەی زیاتر. دژەخۆر هەموو بەیانییەک بەکاربهێنە.', 'البشرة المختلطة 🌿: استخدمي غسول لطيف ومرطب خفيف لمنطقة الـT الدهنية، وزيدي الترطيب للمناطق الجافة. لا تنسين واقي الشمس.', 'Combination skin: use a gentle cleanser and light moisturizer on the oily T-zone, with extra moisturizer on dry areas. Apply sunscreen every morning.')
+                };
+                const intro = topic === 'cleanser' ? say('بۆ غسولەکە،', 'بالنسبة للغسول،', 'For the cleanser,') : say('باشە،', 'تمام،', 'Great,');
+                return intro + ' ' + tips[detectedSkin.name] + say('\nئەگەر ناوی بەرهەمەکانت بنووسیت، دەتوانم ڕیزبەندیی بەکارهێنانیان بۆت ڕوون بکەمەوە. 💗','\nإذا تكتبين أسماء المنتجات، أرتب لج شلون تستخدمينها. 💗','\nShare the product names and I can help put them in the right order. 💗');
+            }
+            if (waitingForSkinType) return say('تکایە یەکێک هەڵبژێرە: چەور، وشک، هەستیار، نۆرماڵ یان تێکەڵ؟', 'اختاري نوع واحد: دهنية، جافة، حساسة، عادية أو مختلطة؟', 'Please choose one: oily, dry, sensitive, normal, or combination?');
+
+            if (detectedSkin && /(پێست|بشرة|skin)/i.test(input)) return say('زۆر باشە، جۆری پێستت '+(detectedSkin.name==='oily'?'چەورە':detectedSkin.name==='dry'?'وشکە':detectedSkin.name==='sensitive'?'هەستیارە':detectedSkin.name==='normal'?'نۆرماڵە':'تێکەڵە')+'. ئێستا کێشەی سەرەکیت چییە؟ زیپکە، وشکی، لکە یان تەنها پاراستن؟', 'تمام، نوع بشرتج اتحدد. شنو أكثر شي يضايقج: حبوب، جفاف، تصبغات لو بس عناية يومية؟', 'Got it. What is your main concern: acne, dryness, dark spots, or general maintenance?');
+
+            if (predefinedKey) {
+                if (predefinedKey === 'acne') return say('بۆ زیپکە، ڕۆتینێکی نەرم گرنگە. جۆری پێستت چییە: چەور، وشک، هەستیار، نۆرماڵ یان تێکەڵ؟', 'لحب الشباب نحتاج روتين لطيف. شنو نوع بشرتج: دهنية، جافة، حساسة، عادية لو مختلطة؟', 'For acne, a gentle routine matters. What is your skin type: oily, dry, sensitive, normal, or combination?');
+                if (predefinedKey === 'moisturizer' || predefinedKey === 'sunscreen' || predefinedKey === 'glass skin') { pendingTopic = predefinedKey; waitingForSkinType = true; return say('پێش ئەوەی ڕێنماییت بکەم، جۆری پێستت چییە: چەور، وشک، هەستیار، نۆرماڵ یان تێکەڵ؟', 'قبل لا أنصحج، شنو نوع بشرتج: دهنية، جافة، حساسة، عادية لو مختلطة؟', 'Before I suggest a routine, what is your skin type: oily, dry, sensitive, normal, or combination?'); }
+            }
+
+            const hair = /(شامپۆ|شامبو|قژ|شعر|hair|shampoo|ماسک قژ|ماسك شعر|hair mask)/i.test(input);
+            const categories = [
+                { re: /(غسول|غسولی|cleanser|face wash|foam)/i, name: 'cleanser' },
+                { re: /(شێدارکەرەوە|مرطب|moisturizer|cream|کرێم)/i, name: 'moisturizer' },
+                { re: /(سیرۆم|سيروم|serum)/i, name: 'serum' },
+                { re: /(تۆنەر|تونر|toner)/i, name: 'toner' },
+                { re: /(دژەخۆر|واقي شمس|sunscreen|spf)/i, name: 'sunscreen' },
+                { re: /(سابون|صابون|soap)/i, name: 'soap' },
+                { re: /(زەیت|زيت|oil|ڕۆنی قژ)/i, name: 'oil' },
+                { re: /(ماسک|ماسك|mask)/i, name: 'mask' }
+            ];
+            const category = categories.find(x => x.re.test(input));
+            if (hair) return say('بەخێربێیت گیانم 🌸 هانا دەتوانێت لەسەر چاودێری قژیش ڕێنماییت بکات. شامپۆ بەپێی جۆری قژ هەڵدەبژێردرێت: چەور، وشک، ئاسایی، هەستیار یان قژی ڕەنگکراو. ماسک بۆ شێداری و نەرمکردنەوەی قژە؛ سیرۆم و زەیتیش بەپێی پێکهاتە و مەبەستی بەرهەم جیاوازن. تکایە ناوی تەواوی بەرهەمەکە یان وێنەی پێشەوە و پێکهاتەکانی بنێرە تا زانیاریی دروست بدەم. قژت چ جۆرە؟', 'أكيد حبيبتي 🌸 أگدر أساعدج بالعناية بالشعر همين. الشامبو نختاره حسب نوع الشعر: دهني، جاف، عادي، حساس أو مصبوغ. الماسك للترطيب والنعومة، والسيروم والزيت يختلف استخدامهم حسب التركيبة. دزي اسم المنتج الكامل أو صورته ومكوناته حتى أعطيج معلومات دقيقة. شنو نوع شعرج؟', 'Of course 🌸 I can help with hair care too. Shampoo should match your hair type—oily, dry, normal, sensitive scalp or color-treated. Masks condition hair; oils and serums vary by formula and purpose. Send the exact product name or photos of its label and ingredients so I can be accurate. What is your hair type?');
+
+            if (category) {
+                if (category.name === 'cleanser') { pendingTopic = 'cleanser'; waitingForSkinType = true; return say('غسول بۆ پاککردنەوەی پێستە، بەڵام هەموو غسولێک بۆ هەموو پێستێک ناگونجێت. جۆری پێستت چییە: چەور، وشک، هەستیار، نۆرماڵ یان تێکەڵ؟ ناوی غسولەکەش بنووسە تا تایبەتمەندییەکەی ڕوون بکەمەوە.', 'الغسول ينظف البشرة، بس مو كل نوع يناسب كل بشرة. شنو نوع بشرتج: دهنية، جافة، حساسة، عادية لو مختلطة؟ واكتبي اسم الغسول حتى أوضح لج تفاصيله.', 'A cleanser removes dirt and excess oil, but not every cleanser suits every skin type. What is your skin type—oily, dry, sensitive, normal or combination? Share the exact cleanser name too.'); }
+                waitingForSkinType = true; pendingTopic = category.name;
+                return say('باشە گیانم 🌸 '+(category.name==='serum'?'سیرۆم':category.name==='toner'?'تۆنەر':category.name==='sunscreen'?'دژەخۆر':category.name==='soap'?'سابون':category.name==='oil'?'زەیت':'ماسک')+' دەتوانێت بە پێکهاتە و جۆری پێست جیاواز بێت. جۆری پێستت چییە: چەور، وشک، هەستیار، نۆرماڵ یان تێکەڵ؟ ناوی تەواوی بەرهەمەکەش بنووسە.', 'تمام حبيبتي 🌸 يختلف حسب المكونات ونوع البشرة. شنو نوع بشرتج: دهنية، جافة، حساسة، عادية لو مختلطة؟ واكتبي اسم المنتج الكامل.', 'Sure 🌸 The best choice depends on its ingredients and your skin type. Is your skin oily, dry, sensitive, normal or combination? Please share the exact product name.');
+            }
+
+            if (/(routine|روتين|ڕۆتین|ڕۆتینی|glass skin|بشرة زجاجية|پێستی شوشەیی)/i.test(input)) { pendingTopic = 'routine'; waitingForSkinType = true; return say('بە خۆشحاڵییەوە ڕۆتینێکت بۆ دادەنێم 🌸 جۆری پێستت چییە: چەور، وشک، هەستیار، نۆرماڵ یان تێکەڵ؟', 'أكيد أرتب لج روتين 🌸 شنو نوع بشرتج: دهنية، جافة، حساسة، عادية لو مختلطة؟', 'I’d be happy to build a routine 🌸 What is your skin type: oily, dry, sensitive, normal or combination?'); }
+
+            if (waitingForProductName) { waitingForProductName = false; return say('ناوی «'+raw+'» تێگەیشتم. تکایە وێنەی بەرهەمەکە و پێکهاتەکانی بنێرە؛ ئەگەر زانیارییەکە لەسەر لیبڵەکە نەبێت، بە دڵنیاییەوە هەڵی ناهێنم.', 'وصلني اسم «'+raw+'». دزي صورة المنتج والمكونات حتى ما أخمن بمعلومات مو مؤكدة.', 'I’ve got the name “'+raw+'”. Please share the product and ingredient-label photos so I don’t guess about its formula.'); }
+            if (/(بەرهەم|منتج|product)/i.test(input)) { waitingForProductName = true; return say('ناوی تەواوی بەرهەمەکە بنووسە یان وێنەکەی بنێرە، هانا قسەی لەسەر دەکات. 🌸', 'اكتبي اسم المنتج الكامل أو دزي صورته، وهناء تشرح لج عنه. 🌸', 'Write the full product name or send a photo, and Hana will explain it. 🌸'); }
+            return say('گیانم، هانا تایبەتە بە چاودێری پێست و قژ 🌸 تکایە پرسیارەکەت یان ناوی بەرهەمەکە بنووسە تا ڕاستەوخۆ وەڵامت بدەمەوە.', 'حبيبتي، هناء مختصة بالعناية بالبشرة والشعر 🌸 اكتبي سؤالج أو اسم المنتج حتى أجاوبج مباشرة.', 'I focus on skin and hair care 🌸 Please write your question or product name and I’ll answer directly.');
+        }
+        function sendMessage(displayText, intentKey = null) {
+            appendMessage('user', displayText);
+            showTypingIndicator();
+
+            // Simulate natural Hana typing delay (700ms - 1100ms)
+            setTimeout(() => {
+                removeTypingIndicator();
+                const reply = generateBotResponse(displayText, intentKey);
+                appendMessage('bot', reply);
+            }, 850);
+        }
+
+        function handleSendMessage() {
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            if (!text) return;
+            input.value = '';
+            sendMessage(text);
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') {
+                handleSendMessage();
+            }
+        }
+
+        // Initialize application on load
+        window.addEventListener('DOMContentLoaded', () => {
+            setLanguage('ckb');
+        });
+    </script>
+</body>
+</html>
