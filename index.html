@@ -45,4 +45,74 @@ function setLang(l){lang=l;document.documentElement.lang=l;document.documentElem
 document.getElementById("language").addEventListener("change",e=>setLang(e.target.value));document.getElementById("search").addEventListener("input",render);document.getElementById("category").addEventListener("change",render);document.querySelectorAll("[data-q]").forEach(b=>b.addEventListener("click",()=>document.getElementById("answer").textContent=T[lang][b.dataset.q]));document.getElementById("year").textContent=new Date().getFullYear();
 async function loadCatalog(){try{const r=await fetch("./catalog.json?update="+Date.now());if(!r.ok)throw new Error("catalog");P=await r.json();render()}catch(e){document.getElementById("grid").innerHTML='<p style="padding:20px">کاتەلۆگ بار نەبوو. تکایە دووبارە هەوڵ بدەرەوە.</p>'}}
 loadCatalog();
-</script></body></html>
+</script>
+<style>
+:root{
+--p:#8b4bb3;
+--pale:#f5edff;
+--ink:#30203f;
+--muted:#756580;
+--line:#e8d9f5;
+}
+body{
+background:#fff;
+color:#30203f;
+font-family:Arial, sans-serif;
+}
+.top{
+background:linear-gradient(90deg,#512778,#a36ac7);
+}
+header{
+background:#ffffffed;
+box-shadow:0 4px 18px #75449b18;
+}
+.brand span,.hero h1 span{
+color:#9b5bc2;
+}
+.btn{
+background:linear-gradient(120deg,#7540a0,#b17add);
+}
+.btn.light{
+background:white;
+color:#79439f;
+border:1px solid #dfc9f0;
+}
+.hero{
+background:linear-gradient(130deg,#eee1ff,#fff,#e9d9fa);
+}
+.art{
+background:linear-gradient(145deg,#e4cafa,#fbf6ff);
+border-radius:28px;
+box-shadow:0 15px 35px #623a861c;
+}
+.section{
+background:#fff;
+}
+.card,.feature{
+border-color:#eadff4;
+border-radius:20px;
+box-shadow:0 8px 24px #59327c0b;
+}
+.photo{
+background:linear-gradient(135deg,#fff,#f3e8ff);
+}
+.price,.tag{
+color:#8547aa;
+}
+.buy{
+background:#f0e3fb;
+color:#713b99;
+}
+.banner{
+background:linear-gradient(120deg,#59317f,#a36ac7);
+border-radius:25px;
+}
+footer{
+background:#f8f2ff;
+}
+.hana-float{
+border:3px solid white;
+box-shadow:0 6px 24px #7d43aa66;
+}
+</style>
+</body></html>
