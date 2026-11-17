@@ -115,4 +115,143 @@ border:3px solid white;
 box-shadow:0 6px 24px #7d43aa66;
 }
 </style>
+<section id="smart-menu">
+  <div class="smart-wrap">
+    <h2>💜 مینیوی دۆزینەوەی بەرهەم</h2>
+    <p>وڵات و جۆری بەرهەمی دڵخوازت هەڵبژێرە</p>
+
+    <div class="smart-controls">
+      <select id="origin">
+        <option value="all">هەموو وڵاتەکان</option>
+        <option value="korean">🇰🇷 کۆری</option>
+        <option value="french">🇫🇷 فەرەنسی</option>
+      </select>
+
+      <select id="kind">
+        <option value="skin">پێست</option>
+        <option value="hair">قژ</option>
+        <option value="body">جەستە</option>
+      </select>
+
+      <select id="subkind">
+        <option value="all">هەموو جۆرەکان</option>
+      </select>
+
+      <input id="smart-search" placeholder="گەڕان بە ناوی بەرهەم...">
+    </div>
+
+    <div id="smart-results"></div>
+  </div>
+</section>
+
+<style>
+#smart-menu {
+  padding:35px 0;
+  background:linear-gradient(140deg,#f5edff,#fff);
+  direction:rtl;
+}
+.smart-wrap {
+  width:92%;
+  max-width:850px;
+  margin:auto;
+  text-align:center;
+}
+.smart-wrap h2 {color:#7540a0}
+.smart-controls {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:20px 0;
+}
+.smart-controls select,
+.smart-controls input {
+  width:100%;
+  padding:13px;
+  border:1px solid #dfc9f0;
+  border-radius:14px;
+  background:white;
+}
+#smart-results {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  text-align:right;
+}
+.smart-item {
+  background:white;
+  padding:15px;
+  border:1px solid #eadff4;
+  border-radius:15px;
+}
+.smart-item button {
+  background:#8547aa;
+  color:white;
+  border:0;
+  padding:9px 15px;
+  border-radius:20px;
+  margin-top:8px;
+}
+@media(max-width:420px) {
+  .smart-controls {grid-template-columns:1fr}
+}
+</style>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const french=["la roche-posay","bioderma","eucerin","acm","isispharma"];
+const hair=["hair-care"];
+const body=["body-care","hands","oil"];
+const skin=["cleanser","toner","serum","cream","moisturizer","sun","eye","eyes"];
+
+function originOf(p){
+ const n=(p[1]+" "+p[2]+" "+p[3]).toLowerCase();
+ if(french.some(x=>n.includes(x))) return "french";
+ return "korean";
+}
+function groupOf(p){
+ if(hair.includes(p[5])) return "hair";
+ if(body.includes(p[5])) return "body";
+ if(skin.includes(p[5])) return "skin";
+ return "skin";
+}
+function subOptions(){
+ const k=$("kind").value;
+ const names={
+ skin:[["all","هەمووی پێست"],["cleanser","غسول"],["toner","تۆنەر"],["moisturizer","شێدارکەر"],["cream","کرێم"],["serum","سیرۆم"],["sun","دژەخۆر"],["eye","چاوی"]],
+ hair:[["all","هەمووی قژ"],["hair-care","چاودێری قژ"]],
+ body:[["all","هەمووی جەستە"],["body-care","چاودێری جەستە"],["hands","دەست"],["oil","ڕۆن"]]
+ };
+ $("subkind").innerHTML=names[k].map(x=>`<option value="${x[0]}">${x[1]}</option>`).join("");
+}
+function show(){
+ if(typeof P==="undefined" || !P.length) return;
+ const o=$("origin").value,k=$("kind").value,s=$("subkind").value;
+ const q=$("smart-search").value.toLowerCase();
+ const list=P.filter(p=>
+ (o==="all"||originOf(p)===o) &&
+ groupOf(p)===k &&
+ (s==="all"||p[5]===s) &&
+ (p[1]+" "+p[2]+" "+p[3]).toLowerCase().includes(q)
+ );
+ $("smart-results").innerHTML=list.length?list.map(p=>`
+ <div class="smart-item">
+ <b>${p[1]}</b>
+ <br><small>${p[7]||""}</small>
+ <br><button onclick="order(${p[0]})">داواکردن</button>
+ </div>`).join(""):"هیچ بەرهەمێک نەدۆزرایەوە";
+}
+$("kind").addEventListener("change",()=>{subOptions();show()});
+["origin","subkind","smart-search"].forEach(id=>
+ $(id).addEventListener(id==="smart-search"?"input":"change",show)
+);
+subOptions();
+const wait=setInterval(()=>{
+ if(typeof P!=="undefined" && P.length){
+ clearInterval(wait);show();
+ }
+},300);
+})();
+</script>
+
 </body></html>
