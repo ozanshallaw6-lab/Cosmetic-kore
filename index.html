@@ -263,4 +263,35 @@ footer{background:#f8f3fc}
 }
 </style>
 
+
+<style>
+/* COSMETIC KORE mobile card spacing correction */
+@media (max-width:800px){
+  #products .grid{align-items:stretch;gap:12px}
+  #products .card{min-width:0;display:flex;flex-direction:column}
+  #products .card .photo{
+    display:flex!important;align-items:center!important;justify-content:center!important;
+    height:128px!important;min-height:128px!important;max-height:128px!important;
+    padding:6px!important;margin:9px 9px 0!important;overflow:hidden!important;
+    flex:0 0 128px!important;line-height:0!important
+  }
+  #products .card .photo img{
+    display:block!important;width:100%!important;height:100%!important;
+    max-width:100%!important;max-height:100%!important;object-fit:contain!important;
+    padding:0!important;margin:0!important
+  }
+  #products .card .body{
+    position:relative!important;display:flex!important;flex:1 1 auto!important;
+    min-height:0!important;padding:10px!important;gap:7px!important
+  }
+  #products .card .tag{display:block!important;position:static!important;font-size:10px!important;line-height:1.3!important}
+  #products .card .body h3{font-size:13px!important;line-height:1.4!important;margin:0!important}
+  #products .card .body p{font-size:11px!important;line-height:1.5!important;margin:0!important}
+  #products .card .buyrow{margin-top:auto!important;padding-top:9px!important}
+}
+@media(max-width:420px){
+  #products .card .photo{height:112px!important;min-height:112px!important;max-height:112px!important;flex-basis:112px!important}
+}
+</style>
+
 </body></html>
