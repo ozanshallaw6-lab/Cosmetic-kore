@@ -54,13 +54,34 @@ textarea::placeholder{color:#a79aaf}
 @media(max-width:420px){body{padding:0}.app{height:100dvh;min-height:0;border-radius:0;border:0}.msg{max-width:94%}header{padding:18px 18px 15px}}
 </style>
 
-</head>
+<style id="hana-screenshot-design">
+:root{--purple:#6e2c9c;--deep:#512078;--pale:#f5edff;--line:#e6d4f5}
+*{box-sizing:border-box}body{padding:0;background:linear-gradient(145deg,#ead8ff,#fbf7ff 48%,#eee2ff)}
+.app{width:min(100%,760px);height:100dvh;min-height:560px;border:0;border-radius:0;background:#fbf8ff;box-shadow:none;overflow:hidden}
+header{padding:18px 22px 14px;background:radial-gradient(ellipse at 12% 0%,#d8b8f7,transparent 55%),linear-gradient(120deg,#55217f,#8e4cc1 58%,#b98ce2);color:#fff;border:0;position:relative;overflow:hidden}
+.top{position:relative;z-index:1;gap:14px}.logo{width:66px;height:66px;border-radius:50%;background:#fff;overflow:hidden;border:3px solid #ead8ff;box-shadow:0 4px 16px #30104b55}.logo img{width:100%;height:100%;object-fit:cover}
+.brand h1{font-size:21px;color:#fff}.brand p{color:#f5eaff;font-size:12px}.status{color:#eaffef;font-size:10px}.dot{background:#65e0a0}
+.langs{position:relative;z-index:1;justify-content:flex-end;margin-top:13px}.lang{background:#fff;color:#4c285e;border:1px solid #eadcf5;border-radius:22px;padding:8px 16px;font-size:12px}.lang.active{background:#71349f;color:#fff;border-color:#fff}
+main{padding:17px 16px 20px;gap:13px;background:transparent}.welcome{background:#fbf7ff;border:1px solid #e8d8f6;border-radius:22px;padding:15px 17px;box-shadow:0 6px 18px #63328c18;font-size:14px;line-height:1.9;color:#3f304a}.welcome strong{color:#71349f}
+.quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.quick button{min-height:66px;border:1px solid #e6d8f1;background:#fff;border-radius:18px;color:#5d3478;padding:9px 5px;font-size:12px;box-shadow:0 4px 13px #48245e16}
+.skin-picker,.recommend{background:#f8f1ff;border:1px solid #e6d6f4;border-radius:22px;padding:13px;box-shadow:0 5px 16px #62348b12}.skin-picker h3,.recommend h3{font-size:16px;color:#64258f;margin:0 0 11px}
+.skin-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.skin-options button{display:flex;flex-direction:column;align-items:center;gap:4px;background:#fff;border:1px solid #e9dff1;border-radius:17px;padding:10px 3px;color:#30263a;font-size:22px}.skin-options button b{font-size:13px}.skin-options button.active{border:2px solid #9652c5;background:#f5eaff;box-shadow:0 0 0 3px #c89de733}
+.recommend-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.rec-card{min-height:105px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;border:1px solid #eadcf4;border-radius:17px;background:#fff;color:#6c3195;font-size:34px;box-shadow:0 3px 12px #48245e12}.rec-card img{width:100%;height:76px;object-fit:contain}.rec-card b{font-size:13px;color:#34263e}
+.msg{max-width:92%;font-size:14px;line-height:1.85}.msg.bot{background:#f5edff;border-color:#e6d8f3}.msg h3,.msg strong{color:#6c3296}.msg.user{background:linear-gradient(135deg,#8647b8,#612b8d)}
+footer{padding:10px 14px calc(8px + env(safe-area-inset-bottom));border-top:1px solid #e8dcf1;background:#fff}.disclaimer{font-size:10px}.composer{border:1.5px solid #d8b9ef;background:#fff;border-radius:25px;padding:6px 8px}.send{background:linear-gradient(135deg,#9b53c9,#64278f);border-radius:50%;width:46px;height:46px}
+.bottom-nav{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:10px}.bottom-nav a{display:flex;flex-direction:column;align-items:center;gap:2px;color:#5e3279;text-decoration:none;font-size:23px;padding:5px;border-radius:18px}.bottom-nav a:first-child{background:#f2e5fc}.bottom-nav small{font-size:10px;color:#34283d}
+@media(max-width:430px){.app{height:100dvh}.brand h1{font-size:18px}.logo{width:58px;height:58px}.quick button{font-size:10px}.skin-picker h3,.recommend h3{font-size:14px}.skin-options button b{font-size:12px}}
+</style></head>
 <body>
 <div class="app">
-<header><div class="top"><div class="logo">✿</div><div class="brand"><h1>Hana Beauty Advisor</h1><p>COSMETIC KORE · Your beauty assistant</p></div><div class="status"><span class="dot"></span><span id="statusText">ئامادەیە</span></div></div>
-<div class="langs"><button class="lang active" data-lang="ckb">کوردی</button><button class="lang" data-lang="ar">العربية</button><button class="lang" data-lang="en">English</button></div></header>
-<main id="chat"><div class="welcome" id="welcome"><strong>بەخێربێیت بۆ COSMETIC KORE 🌸</strong><br>من هانا‌م، یاریدەدەری جوانی و چاودێری پێستم. دەتوانیت پرسیارم لەبارەی ڕۆتینی پێست، بەرهەمەکان و شێوازی بەکارهێنانیان بکەیت.</div><div class="quick" id="quick"><button data-prompt="ڕۆتینی پێستی وشکم بۆ دابنێ">ڕۆتینی پێست</button><button data-prompt="چۆن واقی لە خۆر بەکاربهێنم؟">پاراستن لە خۆر</button><button data-prompt="بۆ پێستی هەستیار چی باشە؟">پێستی هەستیار</button></div></main>
-<footer><p class="disclaimer" id="disclaimer">هانا ڕاوێژی گشتی دەدات؛ بۆ کێشەی پزیشکی پێست پزیشک ببینە.</p><div class="composer"><textarea id="message" rows="1" placeholder="پرسیارەکەت بنووسە..."></textarea><button class="send" id="send" aria-label="Send">➤</button></div></footer>
+<header><div class="top"><div class="logo"><img src="./Han.png" alt="Hana"></div><div class="brand"><h1>Hana Beauty Advisor ✨</h1><p>COSMETIC KORE · یاریدەدەری جوانی تۆ</p></div><div class="status"><span class="dot"></span><span id="statusText">ئامادەیە</span></div></div>
+<div class="langs"><button class="lang" data-lang="en">English</button><button class="lang" data-lang="ar">العربية</button><button class="lang active" data-lang="ckb">کوردی</button></div></header>
+<main id="chat"><div class="welcome" id="welcome"><strong>🌸 بەخێربێیت بۆ COSMETIC KORE</strong><br>من هانا‌م، یاریدەدەری جوانی و چاودێری پێستم. دەتوانیت پرسیارەکانت بپرسیت، یان لە خوارەوە یەکێک هەڵبژێریت.</div>
+<div class="quick" id="quick"><button data-prompt="ڕۆتینی پێستی چەورم بۆ دابنێ">▱ جۆری پێست</button><button data-prompt="پاراستن لە خۆر بۆ پێستم چۆنە؟">☼ پاراستن لە خۆر</button><button data-prompt="ڕۆتینی پێستم بۆ دابنێ">♧ ڕۆتینی پێست</button><button data-prompt="بۆ پێستی هەستیار چی باشە؟">♡ پێستی هەستیار</button></div>
+<section class="skin-picker" dir="rtl"><h3>جۆری پێستت هەڵبژێرە</h3><div class="skin-options"><button data-skin="ئاسایی">🌸<b>ئاسایی</b></button><button data-skin="چەور">💧<b>چەور</b></button><button data-skin="تێکەڵ">🫧<b>تێکەڵ</b></button><button data-skin="وشک">🌾<b>وشک</b></button></div></section>
+<section class="recommend" dir="rtl"><h3>✦ پێشنیاری تایبەتەکان</h3><div class="recommend-grid" id="recommendGrid"><div class="rec-card">☀️<b>دژەخۆر</b></div><div class="rec-card">💧<b>شێدارکەر</b></div><div class="rec-card">🫧<b>غسول</b></div></div></section>
+<footer-placeholder></footer-placeholder><div id="chat-messages" aria-live="polite"></div></main>
+<footer><p class="disclaimer" id="disclaimer">هانا ڕاوێژی گشتی دەدات؛ بۆ کێشەی پزیشکی پێست پزیشک ببینە.</p><div class="composer"><textarea id="message" rows="1" placeholder="پرسیارەکەت بنووسە..."></textarea><button class="send" id="send" aria-label="Send">➤</button></div><nav class="bottom-nav" dir="rtl"><a href="./index.html">⌂<small>سەرەکی</small></a><a href="./index.html#products">▦<small>بەرهەمەکان</small></a><a href="./index.html#products">♡<small>دڵخوازەکان</small></a><a href="./index.html#about">♙<small>پرۆفایل</small></a></nav></footer>
 </div>
 <script>
 const API_URL="https://damp-union-a8d0.ozanshallaw6.workers.dev";
@@ -100,6 +121,27 @@ async function sendMessage(text){text=text.trim();if(!text||sendButton.disabled)
 try{const response=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text+"\n\nIMPORTANT COSMETIC KORE ADVISOR RULES: Never mention or display any price, currency, discount, offer, or cost, even if present in the catalog. Never guess or invent product names, ingredients, benefits, availability, or suitability. Recommend only products whose exact names and relevant details are confirmed in the supplied catalog/context; if no verified match exists, say so and ask for the product label or more details. STRICT ROUTINE FORMAT: For each step, write exactly ONE verified product name, or write only the general step if no verified product fits. Never write 'or', 'and/or', slash-separated alternatives, or multiple product names in one step. Do not list a second brand as an alternative. Do not repeat any product in the same routine or between morning and evening; choose a different verified item, or leave that step as a general instruction. Keep each routine to the essential steps only. Before sending, check the whole answer and remove every price, currency amount, discount, offer, and cost. If a product detail is not confirmed in the catalog/context, do not recommend it. Keep replies concise, practical, and well-organized. For skincare, separate morning and evening steps when relevant; for hair/body care, give a simple routine appropriate to the request. IMPORTANT CUSTOMER-CHOICE FLOW: Understand short replies in context. If the customer says only a skin type such as 'چەورە' (oily), 'وشک' (dry), 'تێکەڵ' (combination), or 'هەستیار' (sensitive), accept it as the answer about skin type. NEVER ask them to repeat the skin type or ask the same question again. Confirm briefly: 'باشە، پێستت چەورەیە.' Then ask only what they want help choosing: cleanser, moisturizer, serum, sunscreen, or a complete routine. If they already selected a category or tapped a category quick-reply, do not ask again; immediately answer for that category using one verified catalog product at most. If they choose a complete routine, make a simple routine with one verified product per step at most, no duplicate products, and no alternatives. Ask only one short clarification if truly necessary. Never give a long questionnaire or repeat a question already answered. Never assume they want all categories just because they described their skin type. Explain patch testing and caution with combining strong active ingredients. Do not diagnose medical conditions; advise a dermatologist for severe or persistent symptoms. Match the customer's selected language. RESPONSE STYLE (VERY IMPORTANT): Reply like a helpful ChatGPT assistant: natural, warm, direct, and brief. Usually answer in 2–5 short sentences. Do not give long introductions, repeated greetings, essays, unnecessary explanations, or huge lists. Ask only one clear question at a time. If the customer asks for a routine, give only a short numbered list of essential steps, with one verified product per step at most, followed by one brief useful caution if needed. If the customer asks a simple question, answer it directly without forcing a routine or asking extra questions. Use simple everyday Sorani Kurdish, Iraqi Arabic, or English matching the customer's language. Never mention prices.",history:history.slice(-10)})});const data=await response.json();if(!response.ok||!data.reply)throw new Error(data.error||'Request failed');history.push({role:'user',text:text},{role:'model',text:data.reply});history=history.slice(-10);typing.remove();addMessage('bot',data.reply);}
 catch(error){typing.remove();addMessage('bot',words[language].error);console.error(error);}
 finally{sendButton.disabled=false;statusText.textContent=words[language].ready;input.focus();}}
-sendButton.addEventListener('click',()=>sendMessage(input.value));input.addEventListener('input',()=>{input.style.height='auto';input.style.height=Math.min(input.scrollHeight,110)+'px';});input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage(input.value);}});setLanguage('ckb');
+<script id="screenshot-interactions">
+document.querySelectorAll('[data-skin]').forEach(btn=>btn.addEventListener('click',()=>{
+ document.querySelectorAll('[data-skin]').forEach(x=>x.classList.remove('active'));
+ btn.classList.add('active');
+ sendMessage('پێستم '+btn.dataset.skin+' ـە. دەمەوێت غسول، شێدارکەر، سیرۆم، دژەخۆر یان ڕۆتین؟');
+}));
+async function loadRecommendationCards(){
+ const grid=document.getElementById('recommendGrid');if(!grid)return;
+ try{
+  const response=await fetch('./catalog.json');if(!response.ok)throw new Error('catalog');
+  const products=await response.json();
+  const groups=[{key:'sun',label:'دژەخۆر',icon:'☀️'},{key:'cream',label:'شێدارکەر',icon:'💧'},{key:'cleanser',label:'غسول',icon:'🫧'}];
+  grid.innerHTML=groups.map(g=>{
+   const p=products.find(x=>String(x[5]||'').toLowerCase().includes(g.key));
+   const img=p&&typeof p[6]==='string'&&p[6].startsWith('data:image')?'<img src="'+p[6]+'" alt="" loading="lazy">':g.icon;
+   return '<button class="rec-card" type="button" data-prompt="'+g.label+' بۆ پێستم پێشنیار بکە">'+img+'<b>'+g.label+'</b></button>';
+  }).join('');
+  grid.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>sendMessage(b.dataset.prompt)));
+ }catch(e){}
+}
+loadRecommendationCards();
+</script>\nsendButton.addEventListener('click',()=>sendMessage(input.value));input.addEventListener('input',()=>{input.style.height='auto';input.style.height=Math.min(input.scrollHeight,110)+'px';});input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage(input.value);}});setLanguage('ckb');
 </script>
 </body></html>
