@@ -206,4 +206,61 @@ box-shadow:0 6px 24px #7d43aa66;
 })();
 </script>
 
+
+<style>
+/* COSMETIC KORE compact product-card refresh */
+:root{
+  --p:#813bb0;
+  --pale:#f5edff;
+  --ink:#2e1c3c;
+  --muted:#6f607a;
+  --line:#e5d5f1;
+}
+body{color:var(--ink);background:#fff;font-family:Arial,system-ui,sans-serif}
+.top{background:linear-gradient(100deg,#54257d,#9b5ac5)}
+header{box-shadow:0 3px 18px #67318a18}
+.brand span,.tag,.price{color:#78349f}
+.btn{background:linear-gradient(120deg,#7135a0,#a35fce)}
+.hero{background:linear-gradient(125deg,#f0e3fb,#fff 55%,#f2e7fb)}
+.hero h1{font-size:clamp(30px,4vw,54px);line-height:1.18}
+.hero p{font-size:15px;line-height:1.65}
+.card{border:1px solid #e6d7f1;border-radius:20px;box-shadow:0 8px 22px #57307812;overflow:hidden}
+.photo{height:170px;margin:12px 12px 0;padding:8px;border-radius:15px;background:#faf7fd;overflow:hidden}
+.photo img{display:block;width:100%;height:100%;object-fit:contain!important;padding:0;border-radius:12px}
+.body{padding:13px 13px 14px;gap:9px}
+.tag{font-size:11px;font-weight:800;letter-spacing:.4px}
+.body h3{font-size:15px;font-weight:800;line-height:1.35;margin:0}
+.body p{font-size:12.5px;line-height:1.55;margin:0;color:#665970}
+.buyrow{padding-top:10px;gap:8px}
+.price{font-size:14px;font-weight:900}
+.buy{background:#eee0f8;color:#71359a;border-radius:12px;font-weight:800}
+.banner{background:linear-gradient(115deg,#54277d,#9a5bc2)}
+footer{background:#f8f3fc}
+.float-contact{gap:8px}
+.wa,.viber{padding:11px 14px;font-size:13px}
+@media(max-width:800px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+  .photo{height:115px;margin:9px 9px 0;padding:5px}
+  .body{padding:10px 10px 12px;gap:7px}
+  .tag{font-size:10px}
+  .body h3{font-size:13px;line-height:1.35}
+  .body p{font-size:11px;line-height:1.5}
+  .price{font-size:12px}
+  .buy{font-size:11px;padding:9px 10px}
+}
+@media(max-width:420px){
+  .grid{gap:10px}
+  .photo{height:100px;margin:8px 8px 0}
+  .body{padding:9px 9px 10px}
+  .body h3{font-size:12px}
+  .body p{font-size:10.5px;line-height:1.45}
+  .buyrow{flex-direction:column;align-items:stretch}
+  .price{text-align:center;font-size:12px}
+  .buy{width:100%}
+  .float-contact{right:8px;bottom:8px;gap:6px}
+  .wa,.viber{min-height:40px;padding:9px 10px;font-size:11px}
+  .hana-float{width:78px;height:78px;right:10px;bottom:70px}
+}
+</style>
+
 </body></html>
